@@ -1,26 +1,23 @@
 library(DBI)
 library(RPostgres)
 
-conectar <- function() {
+conectar <- function(banco = c("fake", "testes")) {
+  banco <- match.arg(banco)
+  
   con <- dbConnect(
-    RPostgres::Postgres(),
-    host = Sys.getenv("DB_HOST"),
-    port = as.integer(Sys.getenv("DB_PORT")),
-    user = Sys.getenv("DB_USER"),
-    password = Sys.getenv("DB_PASSWORD"),
-    dbname = Sys.getenv("DB_NAME")
+    Postgres(),
+    host = Sys.getenv(paste0("DB_HOST_", toupper(banco))),
+    port = as.integer(Sys.getenv(paste0("DB_PORT_", toupper(banco)))),
+    user = Sys.getenv(paste0("DB_USER_", toupper(banco))),
+    password = Sys.getenv(paste0("DB_PASSWORD_", toupper(banco))),
+    dbname = Sys.getenv(paste0("DB_NAME_", toupper(banco)))
   )
   
-  # Verificar se a conexão foi estabelecida com sucesso
   if (dbIsValid(con)) {
-    print("Conexão estabelecida com sucesso!")
+    message("Conexão com o banco '", banco, "' estabelecida com sucesso!")
   } else {
-    print("Falha na conexão ao banco de dados.")
+    message("Falha na conexão com o banco '", banco, "'.")
   }
   
+  return(con)
 }
-
-
-
-
-
