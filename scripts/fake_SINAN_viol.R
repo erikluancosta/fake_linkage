@@ -51,6 +51,13 @@ sinan_viol[cols_to_convert] <- lapply(sinan_viol[cols_to_convert], function(x) {
   iconv(x, from = "latin1", to = "UTF-8", sub = "byte")
 })
 
+
+sinan_viol <- sinan_viol |> 
+  mutate(
+    id_unico = paste0("SINAN_VIOL_", row_number())
+  ) |> 
+  select(id_unico, everything())
+
 ## ----------------------------------
 ##  Salva o dataframe final no banco de dados
 ## ----------------------------------

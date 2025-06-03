@@ -11,6 +11,11 @@ sim <- fetch_datasus(
   uf = "PB", 
   information_system = "SIM-DO")
 
+sim <- sim |> 
+  mutate(
+    id_unico = paste0("SIM_", row_number())
+  ) |> 
+  select(id_unico, everything())
 
 ## ----------------------------------
 ## Upload no banco de dados
